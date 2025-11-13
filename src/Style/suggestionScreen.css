@@ -1,0 +1,258 @@
+.suggestion-container {
+  padding: 30px;
+  font-family: "Inter", sans-serif;
+  background: #fafbfc;
+  color: #222;
+}
+
+.page-title {
+  font-size: 18px;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.class-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+  gap: 20px;
+  margin-top: 15px;
+}
+
+.class-card {
+  background: white;
+  border-radius: 10px;
+  padding: 16px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  transition: 0.2s ease;
+}
+
+.class-card:hover {
+  transform: translateY(-3px);
+}
+
+.class-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.class-icon {
+  font-size: 22px;
+}
+
+.status {
+  margin-left: auto;
+  background: #e6f9ee;
+  color: #28a745;
+  font-size: 12px;
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+.class-desc {
+  margin-top: 8px;
+  color: #666;
+  font-size: 14px;
+}
+
+/* --- AHP Section --- */
+.ahp-section {
+  margin-top: 40px;
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  margin-bottom: 40px;
+}
+
+.scale-row {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 0;
+  flex-wrap: wrap;
+}
+
+.scale-box {
+  flex: 1;
+  text-align: center;
+  border-radius: 8px;
+  padding: 8px;
+  margin: 4px;
+}
+
+.scale-1 { background: #fde7e7; }
+.scale-3 { background: #fff1d6; }
+.scale-5 { background: #fffad1; }
+.scale-7 { background: #e5efff; }
+.scale-9 { background: #f3e5ff; }
+
+.scale-value { font-weight: bold; }
+.scale-label { font-size: 13px; color: #555; }
+
+.matrix-container table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+.matrix-container th,
+.matrix-container td {
+  border: 1px solid #eee;
+  padding: 8px;
+  text-align: center;
+}
+
+.matrix-container th {
+  background: #f8f9fa;
+  font-weight: 600;
+}
+
+select {
+  padding: 4px;
+  border-radius: 5px;
+}
+
+.progress-section {
+  margin-top: 15px;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: #f0f0f0;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.progress {
+  height: 100%;
+  background: #007bff;
+  border-radius: 5px;
+}
+
+.footer-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 25px;
+}
+
+.back-btn, .next-btn {
+  background: none;
+  border: none;
+  font-weight: 500;
+  cursor: pointer;
+  color: #007bff;
+  font-size: 15px;
+}
+
+.next-btn {
+  background: #007bff;
+  color: white;
+  padding: 8px 20px;
+  border-radius: 6px;
+}
+
+.ahp-section {
+  background-color: #f9fafb;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  font-family: "Segoe UI", sans-serif;
+}
+
+.ahp-section h3 {
+  color: #1e293b;
+  margin-bottom: 10px;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.ahp-section p {
+  color: #475569;
+  font-size: 0.95rem;
+  margin-bottom: 20px;
+}
+
+/* --- Scale Row --- */
+.scale-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+
+
+/* --- Matrix Table --- */
+.matrix-section {
+  margin-top: 25px;
+}
+
+.matrix-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  font-size: 0.95rem;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
+}
+
+.matrix-table th,
+.matrix-table td {
+  border: 1px solid #e2e8f0;
+  text-align: center;
+  padding: 8px 10px;
+}
+
+.matrix-table th {
+  background-color: #f1f5f9;
+  color: #1e293b;
+  font-weight: 600;
+}
+
+.matrix-table td select {
+  width: 90%;
+  padding: 6px;
+  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+  background-color: #f8fafc;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.matrix-table td select:hover {
+  border-color: #64748b;
+}
+
+/* --- Progress Bar --- */
+.progress-container {
+  margin-top: 20px;
+}
+
+.progress-container p {
+  margin-bottom: 8px;
+  color: #475569;
+}
+
+.progress-bar {
+  height: 10px;
+  background-color: #e2e8f0;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 10px;
+  background-color: #2563eb;
+  transition: width 0.3s ease;
+}
+
+
+
