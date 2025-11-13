@@ -1,10 +1,18 @@
 import React, { useState, useEffect } from "react";
 import "../Style/surveyForm.css";
-import { useLocation } from "react-router-dom";
 
 const SurveyForm = () => {
     const [currentStep, setCurrentStep] = useState(0);
     const [completedComparisons, setCompletedComparisons] = useState(0);
+
+    const [criteria] = useState([
+        { name: "Server", description: "Physical or virtual server infrastructure components that host applications and services.", icon: "🖥️" },
+        { name: "Database", description: "Database management systems and data storage solutions used by applications.", icon: "🗄️" },
+        { name: "Application", description: "Software applications and services that provide business functionality to end users.", icon: "💻" },
+        { name: "Network Device", description: "Network infrastructure components including routers, switches, and firewalls.", icon: "🌐" },
+        { name: "Computer", description: "End-user computing devices including laptops, desktops, and workstations.", icon: "🧑‍💻" },
+        { name: "Cloud Service", description: "Cloud-based services and infrastructure components hosted by external providers.", icon: "☁️" },
+    ]);
 
     const [criteriaList] = useState([
         { name: "Business Criticality", icon: "⚡" },
@@ -21,10 +29,6 @@ const SurveyForm = () => {
 
     const [currentComparison, setCurrentComparison] = useState({ i: 0, j: 1 });
     const [selectedValue, setSelectedValue] = useState(null);
-    const location = useLocation();
-    const apiResponse = location.state?.apiResponse || "";
-
-    console.log("API Response:", apiResponse);  
 
     const scale = [
         { value: 1, label: "Equal", description: "Both elements contribute equally" },
@@ -40,58 +44,6 @@ const SurveyForm = () => {
         { name: "CI Classes", icon: "🔍" },
         { name: "Results", icon: "📊" }
     ];
-
-    const parseApiResponse = (text) => {
-        // Normalize newlines and spacing
-        text = text.replace(/\r/g, '').trim();
-      
-        // Regex explanation:
-        // - Optional numbering or bullet (e.g., 1., -, *, etc.)
-        // - **name** captures between double asterisks
-        // - Description: anything until the next **name**, number., or end
-        const regex = /(?:\d+\.\s*)?\*\*(.*?)\*\*[^\n]*[\n:\-\u2013\u2014\s]*(.*?)(?=\n(?:\d+\.\s*\*\*|[-*]\s*\*\*|\*\*|$))/gs;
-      
-        const results = [];
-        let match;
-      
-        while ((match = regex.exec(text)) !== null) {
-          let name = match[1]?.trim();
-          let desc = match[2]?.replace(/\s+/g, ' ').trim();
-      
-          if (name && desc) {
-            results.push({ name, description: desc });
-          }
-        }
-      
-        return results;
-      };
-      
-
-
-      const [classes, setClasses] = useState([]);
-
-useEffect(() => {
-  if (apiResponse) {
-    const parsed = parseApiResponse(apiResponse);
-    console.log("Parsed", parsed);
-    const enriched = parsed.map((c) => ({
-      ...c,
-      icon: getIconForClass(c.name),
-    }));
-    setClasses(enriched);
-  }
-}, [apiResponse]);
-
-const getIconForClass = (name) => {
-    name = name.toLowerCase();
-    if (name.includes("computer")) return "🧑‍💻";
-    if (name.includes("application")) return "💻";
-    if (name.includes("network")) return "🌐";
-    if (name.includes("database")) return "🗄️";
-    if (name.includes("service")) return "⚙️";
-    return "📦";
-  };
-  
 
     useEffect(() => {
         calculateAllWeights();
@@ -145,10 +97,10 @@ const getIconForClass = (name) => {
         });
         setCriteriaWeights(cWeights);
 
-        const classResult = calculateWeights(classMatrix, classes.length);
+        const classResult = calculateWeights(classMatrix, criteria.length);
         const ciWeights = {};
-        classes.forEach((c, i) => {
-            ciWeights[c.name] = classResult.weights ? classResult.weights[i] : (1 / classes.length);
+        criteria.forEach((c, i) => {
+            ciWeights[c.name] = classResult.weights ? classResult.weights[i] : (1 / criteria.length);
         });
         setClassWeights(ciWeights);
 
@@ -157,7 +109,7 @@ const getIconForClass = (name) => {
             classes: classResult.consistencyRatio || 0
         });
 
-        const priorities = classes.map(ci => ({
+        const priorities = criteria.map(ci => ({
             className: ci.name,
             weight: ciWeights[ci.name] || 0,
             icon: ci.icon
@@ -190,7 +142,7 @@ const getIconForClass = (name) => {
 
     const moveToNextComparison = () => {
         const { i, j } = currentComparison;
-        const list = currentStep === 1 ? criteriaList : classes;
+        const list = currentStep === 1 ? criteriaList : criteria;
         
         let nextJ = j + 1;
         let nextI = i;
@@ -209,7 +161,7 @@ const getIconForClass = (name) => {
     };
 
     const getTotalComparisons = () => {
-        const list = currentStep === 1 ? criteriaList : classes;
+        const list = currentStep === 1 ? criteriaList : criteria;
         return (list.length * (list.length - 1)) / 2;
     };
 
@@ -233,11 +185,10 @@ const getIconForClass = (name) => {
             <div className="header-section">
                 <h1 className="main-title">CMDB Configuration Item Classification</h1>
             </div>
-
             <div className="section">
-                <h3 className="section-title">Configuration Item Classes ({classes.length})</h3>
+                <h3 className="section-title">Configuration Item Classes ({criteria.length})</h3>
                 <div className="ci-grid">
-                    {classes.map((c, i) => (
+                    {criteria.map((c, i) => (
                         <div key={i} className="ci-card">
                             <div className="ci-header">
                                 <span className="ci-icon">{c.icon}</span>
@@ -277,7 +228,7 @@ const getIconForClass = (name) => {
     );
 
     const renderComparison = () => {
-        const list = currentStep === 1 ? criteriaList : classes;
+        const list = currentStep === 1 ? criteriaList : criteria;
         const { i, j } = currentComparison;
         const itemA = list[i];
         const itemB = list[j];
@@ -445,20 +396,20 @@ const getIconForClass = (name) => {
                             <thead>
                                 <tr>
                                     <th>CI Class</th>
-                                    {classes.map((c, i) => (
+                                    {criteria.map((c, i) => (
                                         <th key={i}>{c.icon} {c.name}</th>
                                     ))}
                                     <th>Weight</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {classes.map((rowCI, i) => (
+                                {criteria.map((rowCI, i) => (
                                     <tr key={i}>
                                         <td className="table-cell-name">
                                             <span className="table-icon">{rowCI.icon}</span>
                                             {rowCI.name}
                                         </td>
-                                        {classes.map((colCI, j) => {
+                                        {criteria.map((colCI, j) => {
                                             const value = i === j ? 1 : (classMatrix[`${i}-${j}`] || '-');
                                             return (
                                                 <td key={j}>

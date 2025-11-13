@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import "../Style/cmdbForm.css";
 import { useNavigate } from "react-router-dom";
-import OpenAI from "openai";
 
 const CMDBForm = () => {
   const navigate = useNavigate();
@@ -14,10 +13,6 @@ const CMDBForm = () => {
   const [loading, setLoading] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const [completedSteps, setCompletedSteps] = useState([]);
-  const openai = new OpenAI({
-    apiKey:`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` , 
-    dangerouslyAllowBrowser: true, // ⚠️ only for local testing
-  });
 
   const questions = [
     {
@@ -34,7 +29,7 @@ const CMDBForm = () => {
     },
     {
       name: "additionalNotes",
-      label: "What current challenges or limitations do you experience with tracking, managing, or analyzing configuration data?",
+      label: "Any additional requirements or notes?",
       placeholder: "Share any specific needs or integration requirements...",
       icon: "✨",
       multiline: true,
@@ -67,23 +62,24 @@ const CMDBForm = () => {
     setLoading(true);
 
     try {
-     
-      const response = await openai.responses.create({
-        model: "gpt-4.1",
-        input: `You are a cmdb designere from the inputs from user derive 5 root cmdb_ci classes. use classes that exsist in servicenow or from CSDM% suggested classes do not go for custom classes that can be used for them just provide the class and its description nothing else:  ${JSON.stringify(formData)}`,
+      // Call your API
+      const response = await fetch("http://127.0.0.1:8000/api/cmdb/plan", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
       });
-  
-      const message = response.output[0].content[0].text;
-  
-      // ✅ Navigate to survey with GPT result
-      navigate("/survey", { state: { apiResponse: message } });
+
+      const data = await response.json();
+
+      // Navigate to Suggestions page with state
+      navigate("/survey", { state: { apiResponse: data } });
     } catch (error) {
       console.error("API Error:", error);
-      alert("Something went wrong calling ChatGPT!");
+      alert("Something went wrong!");
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   const currentQuestion = questions[currentStep];
   const isStepComplete = formData[currentQuestion.name]?.trim().length > 0;
